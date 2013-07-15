@@ -9,6 +9,7 @@
  * */
 
 #include <iostream>
+#include <pthread.h>
 
 #include "A10/debug.h"
 #include "A10/a10.h"
