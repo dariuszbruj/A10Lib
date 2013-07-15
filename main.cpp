@@ -28,11 +28,16 @@ int main(int argc, char **argv)
 		return 1;
 	}
 
-	// Ustaw jako output.
+	// Set pin as an output.
 	a10.gpio.select(A10::GPIO::PortPin::PD0, A10::GPIO::PinSelect::Output);
 
+	// Fast toggle
+	volatile uint32_t* 	DAT = a10.gpio.datareg(A10::GPIO::PortPin::PD0);
+	uint32_t 			PIN = 0x1 << a10.gpio.pinnum(A10::GPIO::PortPin::PD0);
+
     for(;;)
-        a10.gpio.toogle(A10::GPIO::PortPin::PD0);
+        a10.gpio.toggle_f(DAT, PIN); // or more directly *DAT ^= PIN;
+
 
 	return 0;
 

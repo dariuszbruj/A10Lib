@@ -303,7 +303,7 @@ namespace A10
 			/*
 			 * Changes state to opposite (1->0, 0->1).
 			 * */
-			void		toogle(PortPin portpin);
+			void		toggle(PortPin portpin);
 
 			/*
 			 * Changes select mode for pin. Writes mode into CFG register.
@@ -316,11 +316,21 @@ namespace A10
 			uint8_t 	read  (uint8_t port, uint8_t number);
 			void 		write (uint8_t port, uint8_t number, uint8_t value);
 			void 		clear (uint8_t port, uint8_t number);
-			void		toogle(uint8_t port, uint8_t number);
+			void		toggle(uint8_t port, uint8_t number);
 			void 		select(uint8_t port, uint8_t number, uint8_t mode);
 
+			// NOT IMPLEMENTED
 			void 		pull_level (uint8_t port, uint8_t number, uint8_t mode);
 			void 		drive_level(uint8_t port, uint8_t number, uint8_t mode);
+
+			// FAST TOGGLE
+			void			toggle_f(volatile uint32_t *DATREG, uint32_t PIN);			
+			volatile uint32_t *	datareg(uint8_t port);
+			volatile uint32_t *	datareg(PortPin portpin);
+
+			// GET PORT OR PIN NUMBER FROM PortPin enum.
+			uint8_t		portnum(PortPin portpin);
+			uint8_t		pinnum(PortPin portpin);
 
 	};
 
