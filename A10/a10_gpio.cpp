@@ -156,12 +156,12 @@ volatile uint32_t *	A10::GPIO::datareg(A10::GPIO::PortPin portpin)
 
 uint8_t		A10::GPIO::portnum(PortPin portpin)
 {
-	return ((uint8_t) portpin >> 8);
+	return ((uint16_t) portpin >> 8);
 }
 
 uint8_t		A10::GPIO::pinnum(PortPin portpin)
 {
-	return ((uint8_t) portpin & 0xFF);
+	return ((uint16_t) portpin & 0xFF);
 }
 
 
