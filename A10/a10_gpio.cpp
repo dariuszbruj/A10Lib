@@ -1,4 +1,3 @@
-
 /***
  * 
  * Author: Dariusz Bruj (dariusz.bruj@gmail.com)
@@ -133,7 +132,7 @@ void 	 A10::GPIO::toggle(A10::GPIO::PortPin portpin)
 	if (!this->_isInitialized)
 		return;
 		
-    this->toogle((uint16_t) portpin >> 8, (uint16_t) portpin & 0xFF);
+    this->toggle((uint16_t) portpin >> 8, (uint16_t) portpin & 0xFF);
 }
 
 
