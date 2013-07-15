@@ -1,4 +1,3 @@
-
 /***
  * 
  * Author: Dariusz Bruj (dariusz.bruj@gmail.com)
@@ -110,7 +109,7 @@ uint8_t  A10::GPIO::isInitialized()
 	return this->_isInitialized;
 }
 
-void 	 A10::GPIO::toogle(uint8_t port, uint8_t number)
+void 	 A10::GPIO::toggle(uint8_t port, uint8_t number)
 {
 	if (!this->_isInitialized)
 		return;
@@ -128,13 +127,43 @@ void 	 A10::GPIO::toogle(uint8_t port, uint8_t number)
 
 }
 
-void 	 A10::GPIO::toogle(A10::GPIO::PortPin portpin)
+void 	 A10::GPIO::toggle(A10::GPIO::PortPin portpin)
 {
 	if (!this->_isInitialized)
 		return;
 		
-    this->toogle((uint16_t) portpin >> 8, (uint16_t) portpin & 0xFF);
+    this->toggle((uint16_t) portpin >> 8, (uint16_t) portpin & 0xFF);
 }
+
+
+void 	 A10::GPIO::toggle_f(volatile uint32_t *DATREG, uint32_t PIN)
+{
+	// Toggle port.
+	*DATREG ^= PIN;	
+}
+
+volatile uint32_t *	A10::GPIO::datareg(uint8_t port)
+{
+	// Get DAT register for selected port.
+	return this->_gpio_address + port*9 + 4; 
+}
+
+volatile uint32_t *	A10::GPIO::datareg(A10::GPIO::PortPin portpin)
+{
+	// Get DAT register for selected port.
+	return this->datareg(this->portnum(portpin)); 
+}
+
+uint8_t		A10::GPIO::portnum(PortPin portpin)
+{
+	return ((uint16_t) portpin >> 8);
+}
+
+uint8_t		A10::GPIO::pinnum(PortPin portpin)
+{
+	return ((uint16_t) portpin & 0xFF);
+}
+
 
 uint8_t  A10::GPIO::read(uint8_t port, uint8_t number)
 {
