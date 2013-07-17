@@ -1,4 +1,3 @@
-
 /***
  * 
  * Author: Dariusz Bruj (dariusz.bruj@gmail.com)
@@ -18,12 +17,12 @@ int main(int argc, char **argv)
 {
 
 	// Set max priority.
-    int policy;
-    struct sched_param param;
-
-    pthread_getschedparam(pthread_self(), &policy, &param);
-    param.sched_priority = sched_get_priority_max(policy);
-    pthread_setschedparam(pthread_self(), policy, &param);
+    
+    	struct sched_param sp;
+	memset(&sp, 0, sizeof(sp));
+	sp.sched_priority = sched_get_priority_max(SCHED_FIFO);
+	sched_setscheduler(0, SCHED_FIFO, &sp);
+	mlockall(MCL_CURRENT | MCL_FUTURE);
 
     // Displaying welcome text.
 	std::cout << "A10Lib ver. 0.1" << std::endl;
