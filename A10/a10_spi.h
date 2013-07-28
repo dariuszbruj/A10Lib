@@ -25,7 +25,7 @@ namespace A10
             volatile uintptr_t* 	_spix_address;
 
             // a PIO pointer
-            volatile uintptr_t* 	_gpio_address;
+            A10::GPIO* 	            _gpio;
 
             // address of mapped memory
             volatile void*          _map;

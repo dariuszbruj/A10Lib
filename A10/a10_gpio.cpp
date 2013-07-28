@@ -1,10 +1,10 @@
 /***
- * 
+ *
  * Author: Dariusz Bruj (dariusz.bruj@gmail.com)
- * 
- * This work is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License. 
+ *
+ * This work is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-sa/3.0/.
- * 
+ *
  * */
 
 #include "debug.h"
@@ -21,7 +21,7 @@ A10::GPIO::GPIO()
 	// Set default pointer
 	_gpio_address = nullptr;
 
-	// get platform page size 
+	// get platform page size
 	this->_page_size = sysconf(_SC_PAGESIZE);
 	// get platform page mask
 	this->_page_mask  = (~(this->_page_size-1));
@@ -57,7 +57,7 @@ uint32_t A10::GPIO::init()
 		// Return error code.
 		return 1;
     }
-	
+
 	#if DEBUG > 1
 		std::cout << "mem_fd ok" << std::endl;
 	#endif
@@ -80,7 +80,7 @@ uint32_t A10::GPIO::init()
 		#if DEBUG > 1
 			std::cout << "mmap failed" << std::endl;
 		#endif
-		
+
 		return 2;
 	}
 
@@ -92,13 +92,13 @@ uint32_t A10::GPIO::init()
 
 	// SET GPIO offset ADDRESS.
 	this->_gpio_address = (volatile uintptr_t *) ( (uintptr_t)_map + offset);
-	
+
 	// DISPLAY VALUES
 	#if DEBUG > 1
 		std::cout << "map: " << (void*)_map << std::endl;
 		std::cout << "GPIO: " << (void*) this->_gpio_address  << std::endl;
 	#endif
-	
+
 	this->_isInitialized = 1;
 
 	return 0;
@@ -113,7 +113,7 @@ void 	 A10::GPIO::toggle(uint8_t port, uint8_t number)
 {
 	if (!this->_isInitialized)
 		return;
-	
+
 	volatile uintptr_t* DAT = this->_gpio_address + port*9 + 4; 		// port*0x24 + 0x10
 
 	#if DEBUG
@@ -127,11 +127,11 @@ void 	 A10::GPIO::toggle(uint8_t port, uint8_t number)
 
 }
 
-void 	 A10::GPIO::toggle(A10::GPIO::PortPin portpin)
+void 	 A10::GPIO::toggle(A10::GPIO::Pin portpin)
 {
 	if (!this->_isInitialized)
 		return;
-		
+
     this->toggle((uint16_t) portpin >> 8, (uint16_t) portpin & 0xFF);
 }
 
@@ -139,27 +139,27 @@ void 	 A10::GPIO::toggle(A10::GPIO::PortPin portpin)
 void 	 A10::GPIO::toggle_f(volatile uint32_t *DATREG, uint32_t PIN)
 {
 	// Toggle port.
-	*DATREG ^= PIN;	
+	*DATREG ^= PIN;
 }
 
 volatile uint32_t *	A10::GPIO::datareg(uint8_t port)
 {
 	// Get DAT register for selected port.
-	return this->_gpio_address + port*9 + 4; 
+	return this->_gpio_address + port*9 + 4;
 }
 
-volatile uint32_t *	A10::GPIO::datareg(A10::GPIO::PortPin portpin)
+volatile uint32_t *	A10::GPIO::datareg(A10::GPIO::Pin portpin)
 {
 	// Get DAT register for selected port.
-	return this->datareg(this->portnum(portpin)); 
+	return this->datareg(this->portnum(portpin));
 }
 
-uint8_t		A10::GPIO::portnum(PortPin portpin)
+uint8_t		A10::GPIO::portnum(A10::GPIO::Pin portpin)
 {
 	return ((uint16_t) portpin >> 8);
 }
 
-uint8_t		A10::GPIO::pinnum(PortPin portpin)
+uint8_t		A10::GPIO::pinnum(A10::GPIO::Pin portpin)
 {
 	return ((uint16_t) portpin & 0xFF);
 }
@@ -169,7 +169,7 @@ uint8_t  A10::GPIO::read(uint8_t port, uint8_t number)
 {
 	if (!this->_isInitialized)
 		return -1;
-		
+
 	volatile uintptr_t* DAT = this->_gpio_address + port*9 + 4; 		// port*0x24 + 0x10
 
 	#if DEBUG
@@ -182,11 +182,11 @@ uint8_t  A10::GPIO::read(uint8_t port, uint8_t number)
     return (*DAT & ( 1 << number) ) >> number;
 }
 
-uint8_t  A10::GPIO::read(A10::GPIO::PortPin portpin)
+uint8_t  A10::GPIO::read(A10::GPIO::Pin portpin)
 {
 	if (!this->_isInitialized)
 		return -1;
-		
+
 	return this->read((uint16_t) portpin >> 8, (uint16_t) portpin & 0xFF);
 }
 
@@ -194,7 +194,7 @@ void 	 A10::GPIO::write(uint8_t port, uint8_t number, uint8_t value)
 {
 	if (!this->_isInitialized)
 		return;
-		
+
 	volatile uintptr_t* DAT = this->_gpio_address + port*9 + 4; 		// port*0x24 + 0x10
 
 	#if DEBUG
@@ -211,11 +211,11 @@ void 	 A10::GPIO::write(uint8_t port, uint8_t number, uint8_t value)
         *DAT &= ~(1 << number);
 }
 
-void 	 A10::GPIO::write(A10::GPIO::PortPin portpin, uint8_t value)
+void 	 A10::GPIO::write(A10::GPIO::Pin portpin, uint8_t value)
 {
 	if (!this->_isInitialized)
 		return;
-		
+
     this->write((uint16_t) portpin >> 8, (uint16_t) portpin & 0xFF, value);
 }
 
@@ -223,7 +223,7 @@ void	 A10::GPIO::clear(uint8_t port, uint8_t number)
 {
 	if (!this->_isInitialized)
 		return;
-		
+
 	volatile uintptr_t* DAT = this->_gpio_address + port*9 + 4; 		// port*0x24 + 0x10
 
 	#if DEBUG
@@ -235,11 +235,11 @@ void	 A10::GPIO::clear(uint8_t port, uint8_t number)
 	*DAT &= ~(1 << number);
 }
 
-void	 A10::GPIO::clear(A10::GPIO::PortPin portpin)
+void	 A10::GPIO::clear(A10::GPIO::Pin portpin)
 {
 	if (!this->_isInitialized)
 		return;
-		
+
 	this->clear((uint16_t) portpin >> 8, (uint16_t) portpin & 0xFF);
 }
 
@@ -247,7 +247,7 @@ void 	 A10::GPIO::select(uint8_t port, uint8_t number, uint8_t mode)
 {
 	if (!this->_isInitialized)
 		return;
-		
+
 	volatile uintptr_t* CFG = this->_gpio_address + port*9 + 4*(number%8); 		// port*0x24 + offset (0x0, 0x4, 0x8, 0xC)
 
 	#if DEBUG
@@ -260,10 +260,10 @@ void 	 A10::GPIO::select(uint8_t port, uint8_t number, uint8_t mode)
 	*CFG |= mode << (number%8)*4;
 }
 
-void 	 A10::GPIO::select(A10::GPIO::PortPin portpin, PinSelect mode)
+void 	 A10::GPIO::select(A10::GPIO::Pin portpin, PinSelect mode)
 {
 	if (!this->_isInitialized)
 		return;
-		
+
     this->select((uint16_t) portpin >> 8, (uint16_t) portpin & 0xFF, (uint8_t) mode);
 }

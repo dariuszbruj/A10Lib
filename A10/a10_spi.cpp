@@ -7,7 +7,6 @@ A10::SPI::SPI()
 	this->_isInitialized = 0;
 
 	// Set default pointer
-	this->_gpio_address = nullptr;
 	this->_spix_address = nullptr;
 
 	// get platform page size
@@ -27,6 +26,8 @@ uint8_t A10::SPI::init(A10::GPIO *gpio)
 {
     if (!gpio->isInitialized())
         return 1;
+
+    this->_gpio = gpio;
 
     // GET MEMORY FILE
 	int mem_fd = -1;

@@ -1,11 +1,11 @@
 
 /***
- * 
+ *
  * Author: Dariusz Bruj (dariusz.bruj@gmail.com)
- * 
- * This work is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License. 
+ *
+ * This work is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-sa/3.0/.
- * 
+ *
  * */
 
 #ifndef A10_H
@@ -18,6 +18,7 @@
 #include <cstdint>
 
 #include "a10_gpio.h"
+#include "a10_spi.h"
 #include "a10_memorymap.h"
 
 namespace A10
@@ -28,18 +29,18 @@ namespace A10
 		private:
 			/// Is library initialized?
 			uint8_t _isInitialized;
-						
+
 		public:
 			/*
 			 * Main constructor.
 			 * */
 			A10Lib();
-			
+
 			/*
 			 * Main destructor.
 			 * */
 			virtual ~A10Lib();
-			
+
 			/*
 			 * Initialize all interface modules
 			 * */
@@ -48,18 +49,13 @@ namespace A10
 			/*
 			 * A GPIO interface.
 			 * */
-			GPIO gpio;
-
-			/*
-			 * A I2C interface.
-			 * */
-			//A10_TWI1 twi1;
+			A10::GPIO* gpio;
 
 			/*
 			 * A SPI interface.
 			 * */
-			//A10_SPI0 spi0;
-										
+			A10::SPI* spi0;
+
 	};
 }
 #endif // A10_H
