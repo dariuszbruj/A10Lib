@@ -19,6 +19,20 @@ namespace A10
 {
     class SPI
     {
+        public:
+
+            /*
+             * Available ports on this chips.
+             * */
+            enum class Module : uint8_t {
+                SPI0 = 0,
+                SPI1 = 1,
+                SPI2 = 2,
+                SPI3 = 3,
+                SOFT = 8
+             };
+
+
         private:
 
             // a SPIx pointer
@@ -33,6 +47,9 @@ namespace A10
             // is PIO initialized ?
             uint8_t 	    _isInitialized;
 
+            // which module is used?
+            Module          _module;
+
             // memory page size
             uint32_t       _page_size;
 
@@ -42,20 +59,41 @@ namespace A10
             // get pages count for this register.
             uint32_t       _spix_size;
 
+            //Available registers
+            static const uintptr_t _SPI_RXDATA              = 0x00;
+            static const uintptr_t _SPI_TXDATA              = 0x04;
+            static const uintptr_t _SPI_CTRL                = 0x08;
+            static const uintptr_t _SPI_INTCTL              = 0x0C;
+            static const uintptr_t _SPI_ST                  = 0x10;
+            static const uintptr_t _SPI_DMACTL              = 0x14;
+            static const uintptr_t _SPI_WAIT                = 0x18;
+            static const uintptr_t _SPI_CCTL                = 0x1C;
+            static const uintptr_t _SPI_BC                  = 0x20;
+            static const uintptr_t _SPI_TC                  = 0x24;
+            static const uintptr_t _SPI_FIFO_STA            = 0x28;
+
+            // CTRL register
+            static const uint32_t _SPI_CTRL_REG__EN        = 0x1 << 0;
+            static const uint32_t _SPI_CTRL_REG__MODE      = 0x1 << 1;
+            static const uint32_t _SPI_CTRL_REG__PHA       = 0x1 << 2;
+            static const uint32_t _SPI_CTRL_REG__POL       = 0x1 << 3;
+            static const uint32_t _SPI_CTRL_REG__SSPOL     = 0x1 << 4;
+            static const uint32_t _SPI_CTRL_REG__DMAMC     = 0x1 << 5;
+            static const uint32_t _SPI_CTRL_REG__LMTF      = 0x1 << 6;
+            static const uint32_t _SPI_CTRL_REG__SSCTL     = 0x1 << 7;
+            static const uint32_t _SPI_CTRL_REG__TF_RST    = 0x1 << 8;
+            static const uint32_t _SPI_CTRL_REG__RF_RST    = 0x1 << 9;
+            static const uint32_t _SPI_CTRL_REG__XCH       = 0x1 << 10;
+            static const uint32_t _SPI_CTRL_REG__RPSM      = 0x1 << 11;
+            static const uint32_t _SPI_CTRL_REG__SS        = 0x1 << 12;
+            static const uint32_t _SPI_CTRL_REG__DDB       = 0x1 << 13;
+            static const uint32_t _SPI_CTRL_REG__DHB       = 0x1 << 14;
+            static const uint32_t _SPI_CTRL_REG__SS_CTRL   = 0x1 << 15;
+            static const uint32_t _SPI_CTRL_REG__SS_LEVEL  = 0x1 << 16;
+            static const uint32_t _SPI_CTRL_REG__TP_EN     = 0x1 << 17;
+            static const uint32_t _SPI_CTRL_REG__SDC       = 0x1 << 18;
 
         public:
-
-                /*
-                 * Available ports on this chips.
-                 * */
-                enum class Module : uint8_t {
-                    SPI0 = 0,
-                    SPI1 = 1,
-                    SPI2 = 2,
-                    SPI3 = 3,
-                    SOFT = 8
-                 };
-
 
             /** Default constructor */
             SPI();
@@ -71,12 +109,12 @@ namespace A10
             /*
              * Initialize a spiX module
              * */
-            uint8_t init(A10::SPI::Module module);
+            uint8_t init(A10::GPIO *gpio, A10::SPI::Module module);
 
             /*
              * Checks if this module is intiialized.
              * */
-            uint8_t		isInitialized();
+            uint8_t	isInitialized();
 
             /*
                 SDC

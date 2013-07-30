@@ -24,6 +24,7 @@
 
 namespace A10
 {
+    class SPI;
 
     /*
      * A GPIO Class.
@@ -50,6 +51,8 @@ namespace A10
             // get pages size for this register.
             uint32_t       _gpio_size;
 
+            // set friends
+            friend class A10::SPI;
 
         public:
 
@@ -317,11 +320,11 @@ namespace A10
             /*
              * Single port.
              * */
-            uint8_t 	read  (uint8_t port, uint8_t number);
-            void 		write (uint8_t port, uint8_t number, uint8_t value);
-            void 		clear (uint8_t port, uint8_t number);
-            void		toggle(uint8_t port, uint8_t number);
-            void 		select(uint8_t port, uint8_t number, uint8_t mode);
+            uint8_t 	read  (uint16_t port, uint16_t number);
+            void 		write (uint16_t port, uint16_t number, uint8_t value);
+            void 		clear (uint16_t port, uint16_t number);
+            void		toggle(uint16_t port, uint16_t number);
+            void 		select(uint16_t port, uint16_t number, uint8_t mode);
 
             // NOT IMPLEMENTED
             void 		pull_level (uint8_t port, uint8_t number, uint8_t mode);
@@ -329,12 +332,25 @@ namespace A10
 
             // FAST TOGGLE
             void			toggle_f(volatile uint32_t *DATREG, uint32_t PIN);
-            volatile uint32_t *	datareg(uint8_t port);
+            volatile uint32_t *	datareg(uint16_t port);
             volatile uint32_t *	datareg(A10::GPIO::Pin portpin);
 
             // GET PORT OR PIN NUMBER FROM A10::GPIO::Pin enum.
-            uint8_t		portnum(A10::GPIO::Pin portpin);
-            uint8_t		pinnum(A10::GPIO::Pin portpin);
+            uint16_t		portnum(A10::GPIO::Pin portpin);
+            uint16_t		pinnum(A10::GPIO::Pin portpin);
+
+        private:
+
+            /*
+             * Set SPI pins.
+             * */
+
+            // TODO: pins blocking
+            //void SetSPI0();
+            //void SetSPI1();
+            //void SetSPI2();
+            //void SetSPI3();
+            //void SetSPIS(A10::GPIO::Pin portpin ss, A10::GPIO::Pin portpin clk, A10::GPIO::Pin portpin mosi, A10::GPIO::Pin portpin miso);
 
     };
 }

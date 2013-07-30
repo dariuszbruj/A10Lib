@@ -49,9 +49,13 @@ int main(int argc, char **argv)
 	volatile uint32_t* 	DAT = a10.gpio->datareg(A10::GPIO::Pin::PD0);
 	uint32_t 			PIN = 0x1 << a10.gpio->pinnum(A10::GPIO::Pin::PD0);
 
-    for(;;)
-        //a10.gpio.toggle_f(DAT, PIN); // or more directly
-        *DAT ^= PIN;
+//    for(;;)
+//        //a10.gpio.toggle_f(DAT, PIN); // or more directly
+//        *DAT ^= PIN;
+
+    a10.spi0->Enable();
+
+    a10.spi0->Disable();
 
 
 	return 0;
