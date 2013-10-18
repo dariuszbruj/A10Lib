@@ -1,63 +1,41 @@
-/***
+/* 
+ * File:   main.cpp
+ * Author: dbruj
  *
- * Author: Dariusz Bruj (dariusz.bruj@gmail.com)
- *
- * This work is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
- * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-sa/3.0/.
- *
- * */
+ * Created on 18 październik 2013, 17:34
+ * 
+ * skrzaty są super!
+ */
 
+#include <cstdlib>
 #include <iostream>
-#include <pthread.h>
-#include <stdio.h>
-#include <string.h>
 
-#include "A10/debug.h"
-#include "A10/a10.h"
+#include "a10.h"
+#include "a10gpio.h"
 
-int main(int argc, char **argv)
-{
+using namespace std;
 
-	// Set max priority (will make system choke, but you get signal more stable ~1.85Mhz).
+/*
+ * Main function.
+ */
+int main(int argc, char** argv) {
 
-    //struct sched_param sp;
-	//memset(&sp, 0, sizeof(sp));
-	//sp.sched_priority = sched_get_priority_max(SCHED_FIFO);
-	//sched_setscheduler(0, SCHED_FIFO, &sp);
-	//mlockall(MCL_CURRENT | MCL_FUTURE);
-
-
-    // Displaying welcome text.
-	std::cout << "A10Lib ver. 0.1" << std::endl;
-
-	// Create object.
-	A10::A10Lib a10;
-
-	// Initialize all modules.
-	if (a10.init() > 0)
-	{
-		std::cout << " Cannot initialize A10::A10Lib." << std::endl;
-		return 1;
-	}
-
-	std::cout << " Select PD0 as an output." << std::endl;
-	// Set pin as an output.
-	a10.gpio->select(A10::GPIO::Pin::PD0, A10::GPIO::PinSelect::Output);
-
-	// Fast toggle
-	std::cout << " Toggle PD0 pin." << std::endl;
-	volatile uint32_t* 	DAT = a10.gpio->datareg(A10::GPIO::Pin::PD0);
-	uint32_t 			PIN = 0x1 << a10.gpio->pinnum(A10::GPIO::Pin::PD0);
-
-//    for(;;)
-//        //a10.gpio.toggle_f(DAT, PIN); // or more directly
-//        *DAT ^= PIN;
-
-    a10.spi0->Enable();
-
-    a10.spi0->Disable();
-
-
-	return 0;
-
+    // Zadeklaruj zmienną.
+    A10* a10;
+    
+    // Utwórz zmienną
+    a10 = new A10;
+    
+    // Zainicjum A10.
+    a10->init();
+    
+    //a10->gpio->select(A10::PIN::PD10, A10::PINMODE::Output);
+    a10->gpio->toggle(A10::PIN::PH21);
+    a10->gpio->toggle(A10::PIN::PH20);
+    
+    // Usuń nieużywaną już zmienną.
+    delete a10;
+    
+    return 0;
 }
+
